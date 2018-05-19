@@ -1,0 +1,16 @@
+User credentials (username, password) is implicitly needed for every request.
+
+-Util-
+Get	Verify		        
+
+-Core-
+Post Get/1 Put Delete	    User		
+Post Get/1 Put Delete	    Player
+Post Get/1/n Put Delete     Deck
+Post Get/1/n                Result
+Post Get/1/n                Game
+Post Get/1/n                Rating
+
+-Addon-
+Post Get                    Tag              
+

@@ -1,0 +1,43 @@
+-- Model --
+Model objects (obj) determines type and attributes
+Each obj has an id (Id)
+Each obj has a creation date (Created)
+? Each obj has a reference version containing only Id and DisplayName
+Each obj can be retrieved from API by Id
+An obj can contain other model objects as reference(Id), attachment(obj) or component(obj) where the difference between an attachment and a fragment is that a component will be deleted if the obj is deleted
+
+-- Model types --
+Each obj has one of two kinds of editType, either persistent (hidden/evolved), final (deleted) or component (deleted with parent)
+
+-- Store --
+Each obj has a Store
+Each obj (with sub-objects) can be stored through its persist method
+Each obj can be retrieved from Store by Id through its fetch method
+PERSISTENT objects have the update method, which in fact creates a new copy with new attributes
+Final objects have the delete method which deletes the object together with all its components
+Component objects does not have their own delete method, they are deleted together with their parent
+
+
+
+
+
+Each obj also have [id, created, editType]
+
+User [name, password, login], per
+Player [name], per
+Token [token], fin
+Settings [?] - tbd, per
+Deck [name, format, theme, black, white, red, green, blue, colorless], per
+Game [end], fin
+	* - Result [place, comment]
+		* -- Life [life]
+		? - Death [cause]
+Tag [tag, polarity], fin
+Rating [speed, strength, synergy, control] / [?], fin
+
+
+
+Java
+Model object attributes are public as the current state of the data should be transparent with no modifiers on get or set
+
+

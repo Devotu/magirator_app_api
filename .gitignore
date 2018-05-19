@@ -1,0 +1,35 @@
+# Java #
+*.class
+
+# Play #
+bin/
+/db
+.eclipse
+/lib/
+/logs/
+/modules
+/project/project
+/project/target
+/target
+tmp/
+test-result
+server.pid
+*.eml
+/dist/
+.cache
+
+# VS Code #
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# g8 #
+.g8/
+
+# Gradle #
+.gradle/
+
+# Eclipse #
+*.eclipse.*
