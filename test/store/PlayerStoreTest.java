@@ -14,7 +14,7 @@ public class PlayerStoreTest {
     @Test
     public void player(){
 
-        Neo4jDriver db = new Neo4jDriver(true);
+        Neo4jDriver db = new Neo4jDriver();
 
         //Fetching Anchor 
         UserStore userStore = new UserStore();

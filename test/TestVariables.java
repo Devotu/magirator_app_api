@@ -4,6 +4,8 @@ package test;
  * Ids of nodes created by the test/backbone.cyper query.
  */
 public class TestVariables {
+    
+    public static final String BASE_URL = "http://localhost:9000/api/v1";
 
     public static final long GLOBAL_UNIQUE_START = 1000;
     public static final long USER_1_ID = 1;

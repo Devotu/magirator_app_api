@@ -9,58 +9,26 @@ import com.fasterxml.jackson.databind.node.*;
 import play.Logger;
 
 public class JsonResponses {
-    
-    public static ObjectNode createResponse(Parcel parcel) {
+
+    public static ObjectNode convertToData(Object object) {
          
         ObjectNode result = Json.newObject();
 
-        boolean isSuccessful = (parcel.status == Status.OK);
-        result.put("isSuccessful", isSuccessful);
+        if (object instanceof String) {
 
-        result.put("response", parcel.message);
-
-        if (parcel.payload instanceof String) {
-
-            result.put("data", (String) parcel.payload);
+            result.put("data", (String) object);
         }
         else {
 
             ObjectMapper objectMapper = new ObjectMapper();
             ObjectNode data = objectMapper.createObjectNode();
-            JsonNode value = objectMapper.convertValue(parcel.payload, JsonNode.class);
+            JsonNode value = objectMapper.convertValue(object, JsonNode.class);
 
-            data.set(parcel.payload.getClass().getSimpleName(), value);
+            data.set(object.getClass().getSimpleName(), value);
             result.set("data", data);
         }
  
         Logger.debug(result.toString());
         return result;
     }
-
-    public static ObjectNode createResponse(boolean ok, String response, Object body) {
-         
-        ObjectNode result = Json.newObject();
-        result.put("isSuccessfull", ok);
-        result.put("response", response);
-
-        if (body instanceof String) {
-            result.put("data", (String) body);
-        }
-        else {
-            result.put("data", (JsonNode) body);
-        }
- 
-        Logger.debug(result.toString());
-        return result;
-    }
-
-    public static ObjectNode createResponse(boolean ok, String response) {
-        
-       ObjectNode result = Json.newObject();
-       result.put("isSuccessfull", ok);
-       result.put("response", response);
-
-       Logger.debug(result.toString());
-       return result;
-   }
 }

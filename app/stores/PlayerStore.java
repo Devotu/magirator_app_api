@@ -10,6 +10,7 @@ import java.util.Date;
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.types.Node;
+import org.neo4j.driver.v1.exceptions.*;
 
 import static org.neo4j.driver.v1.Values.parameters;
 
@@ -61,7 +62,7 @@ public class PlayerStore implements Store<User, Player> {
         String msg = "";
 
         String query =  
-        "MATCH (n:Player)" +
+        "MATCH (n:Player:Active)" +
         " -[:Currently]->" +
         " (d:Data)" +
         " WHERE n.id = $id" + 
@@ -89,7 +90,10 @@ public class PlayerStore implements Store<User, Player> {
 
             Logger.debug("Player: " + player.id + ", " + player.name);
 
-            return new Parcel(Status.OK, "ok", player);
+            return new Parcel(Status.OK, msg, player);
+
+        } catch (NoSuchRecordException e) {            
+            return new Parcel(Status.NOT_FOUND, msg, null);
 
         } catch (Exception e) {
             Logger.debug(this.getClass().getName() + ": " + e.toString());             

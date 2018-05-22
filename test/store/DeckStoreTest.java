@@ -16,7 +16,7 @@ public class DeckStoreTest {
     @Test
     public void deck(){
 
-        Neo4jDriver db = new Neo4jDriver(true);
+        Neo4jDriver db = new Neo4jDriver();
 
         //Fetching Anchor 
         PlayerStore playerStore = new PlayerStore();

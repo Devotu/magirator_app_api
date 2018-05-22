@@ -10,7 +10,7 @@ public class UniqueIdTest {
     public void idGeneration() {
         Logger.debug("Testing db driver unique id function");
 
-        Neo4jDriver db = new Neo4jDriver(true);
+        Neo4jDriver db = new Neo4jDriver();
 
         int uniqueId1 = 0;
         int uniqueId2 = 0;

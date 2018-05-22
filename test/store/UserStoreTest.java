@@ -22,7 +22,7 @@ public class UserStoreTest {
         inputUser.name = userName;
         inputUser.password = userPassword;
 
-        Neo4jDriver db = new Neo4jDriver(true);
+        Neo4jDriver db = new Neo4jDriver();
 
         Parcel created = userStore.create(null, inputUser, db);
 

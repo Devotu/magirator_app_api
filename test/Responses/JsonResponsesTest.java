@@ -26,11 +26,10 @@ public class JsonResponsesTest {
         
         Parcel parcel = new Parcel(Status.OK, "Testing", player);
 
-        ObjectNode response = JsonResponses.createResponse(parcel);
+        ObjectNode response = JsonResponses.convertToData(parcel.payload);
 
         Logger.debug(response.toString());
 
-        assertTrue(response.get("isSuccessful").asBoolean());
         assertTrue(response.get("data").has("Player"));
         assertEquals(player.name, response.get("data").get("Player").get("name").asText());
     }
