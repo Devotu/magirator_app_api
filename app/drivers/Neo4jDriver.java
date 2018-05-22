@@ -23,13 +23,9 @@ public class Neo4jDriver implements AutoCloseable {
     private String username;
     private String password;
 
-    public Neo4jDriver(boolean test) {
+    public Neo4jDriver() {
 
-        if(test){
-            loadConf("test");
-        } else {
-            loadConf("main");
-        }
+        loadConf("main");
 
         driver = GraphDatabase.driver(this.protocol + "://" + this.host + ":" + this.port,
                 AuthTokens.basic(this.username, this.password));
