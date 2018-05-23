@@ -14,6 +14,7 @@ import drivers.*;
 import test.*;
 
 import java.util.Date;
+import java.util.ArrayList;
 
 public class JsonResponsesTest {
 
@@ -22,7 +23,7 @@ public class JsonResponsesTest {
         
         Player player = new Player();
 
-        player.assignAll(1, new Date(), "Jason");
+        player.assignAll(1, new Date(), "Jason", new ArrayList());
         
         Parcel parcel = new Parcel(Status.OK, "Testing", player);
 

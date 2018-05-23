@@ -5,6 +5,7 @@ import transfers.*;
 import drivers.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Date;
 
 import org.neo4j.driver.v1.StatementResult;
@@ -66,7 +67,12 @@ public class PlayerStore implements Store<User, Player> {
         " -[:Currently]->" +
         " (d:Data)" +
         " WHERE n.id = $id" + 
-        " RETURN n,d";
+        " OPTIONAL MATCH (n:Player:Active)" +
+        " -[:Possess]->" +
+        " (deck:Deck)" +
+        " WHERE n.id = $id" + 
+        " RETURN n,d," + 
+        " collect(deck.id) as deckIds";
 
         HashMap<String, Object> params = new HashMap<>();
 
@@ -80,12 +86,14 @@ public class PlayerStore implements Store<User, Player> {
             Record record = result.single();
             Node node = record.get("n").asNode();
             Node data = record.get("d").asNode();
+            List<Object> deckIds = record.get("deckIds").asList();
 
             Player player = new Player();
             player.assignAll(
                 node.get("id").asLong(),
                 new Date(data.get("created").asLong()),
-                data.get("name").asString()
+                data.get("name").asString(),
+                deckIds
             );
 
             Logger.debug("Player: " + player.id + ", " + player.name);
