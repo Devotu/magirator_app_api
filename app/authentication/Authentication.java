@@ -27,10 +27,14 @@ public class Authentication {
         " WHERE " +
         " d.name = $username" +
         " AND d.password = $password" +
-        " CREATE" + 
-        " (t:Token  { created:TIMESTAMP(), token:$token })" +
+        " MERGE" + 
+        " (t:Token)" +
         " -[:Grants]->" +
         " (p)" + 
+        " ON CREATE " + 
+        " SET t.created = TIMESTAMP() ,t.token = $token" +
+        " ON MATCH " +
+        " SET t.created = TIMESTAMP()" + 
         " RETURN t";
 
         HashMap<String, Object> params = new HashMap<>();

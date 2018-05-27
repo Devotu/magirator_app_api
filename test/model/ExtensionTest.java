@@ -10,7 +10,6 @@ public class ExtensionTest {
     
     @Test 
     public void modelAttributes() {
-        Logger.debug("Testing Model + extended class attributes");
     
         Long id = 1L;
         Date created = new Date();

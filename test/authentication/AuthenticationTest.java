@@ -25,10 +25,6 @@ public class AuthenticationTest {
         Parcel result = Authentication.requestToken( username, encryptedPassword, db );
         String token = (String) result.payload;
 
-        Logger.debug("Token payload: " + result.payload);
-        Logger.debug("Token: " + token);
-        Logger.debug("Token length: " + token.length());
-
         assertEquals( Status.OK, result.status );
         assertTrue( null != token );
         assertTrue( token.length() == Encryption.TOKEN_LENGTH );
