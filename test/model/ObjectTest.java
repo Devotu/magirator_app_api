@@ -24,10 +24,6 @@ public class ObjectTest {
         assertEquals(ModelEditType.PERSISTENT, player.editType);
         assertEquals(0L, player.id);
 
-        Token token = new Token();
-        assertEquals(ModelEditType.FINAL, token.editType);
-        assertEquals(0L, token.id);
-
         Settings settings = new Settings();
         assertEquals(ModelEditType.PERSISTENT, settings.editType);
         assertEquals(0L, settings.id);

@@ -16,4 +16,8 @@ public class TestVariables {
     public static final long RESULT_1_ID = 30;
     public static final long RESULT_2_ID = 31;
     public static final long RESULT_3_ID = 32;
+
+    public static final String USER_1_NAME = "Adam";
+    public static final String USER_1_PASSWORD = "Hemligt";
+    public static final String USER_1_PASSWORD_HASH = "47b2686cbbc5aba83021072684c76602c4aef2aa22c5546987045817d10aef5a169ca7d77731cf334ae32c22bcaa8d6e57037e4456131cf1bbef9af30a08ace0";
 }
