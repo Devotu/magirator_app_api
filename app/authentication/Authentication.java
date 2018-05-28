@@ -32,7 +32,7 @@ public class Authentication {
         " -[:Grants]->" +
         " (p)" + 
         " ON CREATE " + 
-        " SET t.created = TIMESTAMP() ,t.token = $token" +
+        " SET t.created = TIMESTAMP(), t.token = $token" +
         " ON MATCH " +
         " SET t.created = TIMESTAMP()" + 
         " RETURN t";
@@ -47,7 +47,35 @@ public class Authentication {
         try {
             result.single().get("t");
         } catch (NoSuchRecordException e) {
-            return new Parcel(Status.ERROR, "Invalid credentials", null);
+            return new Parcel(Status.UNAUTHORIZED, "No user with such credentials.", null);
+        }
+        
+        return new Parcel(Status.OK, msg, token);
+    }
+
+    public static Parcel validateGrant( long id, String token, Neo4jDriver db ) {
+
+        String msg = "";
+
+        String query =  
+        "MATCH " + 
+        " (t:Token)-[:Grants]->(n)" + 
+        " WHERE " +
+        " n.id = $id" +
+        " AND t.token = $token" +
+        " SET t.refreshed = TIMESTAMP()" + 
+        " RETURN n";
+
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("id", id);
+        params.put("token", token);
+
+        StatementResult result = db.runQuery(query, params);
+
+        try {
+            result.single().get("n");
+        } catch (NoSuchRecordException e) {
+            return new Parcel(Status.NOT_FOUND, "Node not found", null);
         }
         
         return new Parcel(Status.OK, msg, token);

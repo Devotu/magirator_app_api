@@ -1,5 +1,5 @@
 package transfers;
 
 public enum Status {
-    OK, ERROR, NOT_FOUND
+    OK, ERROR, NOT_FOUND, UNAUTHORIZED
 }
