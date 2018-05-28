@@ -19,15 +19,12 @@ public class AuthenticationTest {
         String username = TestVariables.USER_1_NAME;
         String password = TestVariables.USER_1_PASSWORD;
 
-        String encryptedPassword = Encryption.getHash(password);
-        Logger.debug("Encrypted password: " + encryptedPassword);
-
-        Parcel result = Authentication.requestToken( username, encryptedPassword, db );
-        String token = (String) result.payload;
+        Parcel result = Authentication.requestToken( username, password, db );
+        Token token = (Token) result.payload;
 
         assertEquals( Status.OK, result.status );
         assertTrue( null != token );
-        assertTrue( token.length() == Encryption.TOKEN_LENGTH );
+        assertTrue( token.token.length() == Encryption.TOKEN_LENGTH );
     } 
 
     @Test 
@@ -38,10 +35,7 @@ public class AuthenticationTest {
         String username = "Errol";
         String password = TestVariables.USER_1_PASSWORD;
 
-        String encryptedPassword = Encryption.getHash(password);
-        Logger.debug("Encrypted (wrong) password: " + encryptedPassword);
-
-        Parcel result = Authentication.requestToken( username, encryptedPassword, db );
+        Parcel result = Authentication.requestToken( username, password, db );
         String token = (String) result.payload;
 
         assertEquals( Status.UNAUTHORIZED, result.status );
@@ -56,10 +50,7 @@ public class AuthenticationTest {
         String username = TestVariables.USER_1_NAME;
         String password = "Wrong";
 
-        String encryptedPassword = Encryption.getHash(password);
-        Logger.debug("Encrypted (wrong) password: " + encryptedPassword);
-
-        Parcel result = Authentication.requestToken( username, encryptedPassword, db );
+        Parcel result = Authentication.requestToken( username, password, db );
         String token = (String) result.payload;
 
         assertEquals( Status.UNAUTHORIZED, result.status );

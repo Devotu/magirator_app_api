@@ -5,6 +5,7 @@ import transfers.*;
 import drivers.*;
 
 import java.util.HashMap;
+import java.util.Date;
 
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.Record;
@@ -17,7 +18,8 @@ public class Authentication {
 
     public static Parcel requestToken( String username, String password, Neo4jDriver db ) {
         
-        String token = Encryption.generateToken();
+        String encryptedPassword = Encryption.getHash(password);
+        String tokenChars = Encryption.generateToken();
 
         String msg = "";
 
@@ -39,8 +41,8 @@ public class Authentication {
 
         HashMap<String, Object> params = new HashMap<>();
         params.put("username", username);
-        params.put("password", password);
-        params.put("token", token);
+        params.put("password", encryptedPassword);
+        params.put("token", tokenChars);
 
         StatementResult result = db.runQuery(query, params);
 
@@ -49,6 +51,10 @@ public class Authentication {
         } catch (NoSuchRecordException e) {
             return new Parcel(Status.UNAUTHORIZED, "No user with such credentials.", null);
         }
+
+        Token token = new Token();
+        token.created = new Date();
+        token.token = tokenChars;
         
         return new Parcel(Status.OK, msg, token);
     }

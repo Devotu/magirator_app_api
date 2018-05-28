@@ -10,3 +10,4 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 
 
 GET     /api/v1/players/:id                 v1.PlayerController.get(id: Long)
+GET     /api/v1/token                       v1.TokenController.requestToken(username: String ?="", password: String ?="")
