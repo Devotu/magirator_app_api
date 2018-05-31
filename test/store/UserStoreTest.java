@@ -27,26 +27,28 @@ public class UserStoreTest {
         Parcel created = userStore.create(null, inputUser, db);
 
         Status status = created.status;
-        Long createdUserId = (Long) created.payload;
+        User createdUser = (User) created.payload;
 
         assertEquals(Status.OK, status);
-        assertTrue(createdUserId > 0);
+        assertTrue(createdUser != null);
+        assertTrue(createdUser.id > 0);
+        assertTrue(userName.equals(createdUser.name));
 
 
         //Reading
-        Parcel createdParcel = userStore.read(createdUserId, db);
-        User createdUser = (User) createdParcel.payload;
+        Parcel createdParcel = userStore.read(createdUser.id, db);
+        User readUser = (User) createdParcel.payload;
 
-        if (createdUser == null) {
+        if (readUser == null) {
             Logger.debug("User is null");
         }
 
-        Logger.debug("User read: " + createdUser.id + ", " + createdUser.name);
+        Logger.debug("User read: " + readUser.id + ", " + readUser.name);
 
         assertEquals(Status.OK, status);
-        assertEquals((Long)createdUserId, (Long)createdUser.id);
-        assertEquals(inputUser.name, createdUser.name);
-        assertEquals(inputUser.password, createdUser.password);
+        assertEquals((Long)createdUser.id, (Long)readUser.id);
+        assertEquals(inputUser.name, readUser.name);
+        assertEquals(inputUser.password, readUser.password);
 
 
         //Updating
@@ -63,13 +65,13 @@ public class UserStoreTest {
         User updatedUser = (User) updatedReadParcel.payload;
 
         assertEquals(Status.OK, status);
-        assertEquals((Long)createdUserId, (Long)updatedUser.id);
+        assertEquals((Long)readUser.id, (Long)updatedUser.id);
         assertEquals(updatingUser.name, updatedUser.name);
         assertEquals(updatingUser.password, updatedUser.password);
 
 
         //Deleting
-        Parcel deletedParcel = userStore.delete(createdUserId, db);
+        Parcel deletedParcel = userStore.delete(readUser.id, db);
         boolean deleted = (Boolean) deletedParcel.payload;
 
         assertEquals(Status.OK, status);

@@ -9,6 +9,11 @@ public class User extends Model {
     public String name;
     public String password;
 
+    public void assignNew (String name, String password){
+        this.name = name;
+        this.password = password;
+    }
+
     public void assignAll (long id, Date created, String name, String password){
         this.id = id;
         this.created = created;

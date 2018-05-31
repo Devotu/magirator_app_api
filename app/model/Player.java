@@ -11,6 +11,10 @@ public class Player extends Model {
     public String name;
     public List<Long> deckIds = new ArrayList();
 
+    public void assignNew ( String name ){
+        this.name = name;
+    }
+
     public void assignAll ( long id, Date created, String name, List deckIds ){
         this.id = id;
         this.created = created;

@@ -18,7 +18,7 @@ import play.Logger;
 public class UserStore implements Store<Model, User> {
 
     @Override
-    public Parcel create(Model _anchor, User model, Neo4jDriver db){
+    public Parcel create( Model _anchor, User model, Neo4jDriver db ){
 
         String msg = "";
 
@@ -33,7 +33,7 @@ public class UserStore implements Store<Model, User> {
             " (n:User:PERSISTENT:Active { id:$id })" + 
             " -[:Currently]->" +
             " (d:Data { created:TIMESTAMP(), name:$name, password:$password })" + 
-        " RETURN n.id";
+        " RETURN n,d";
 
         HashMap<String, Object> params = new HashMap<>();
 
@@ -45,9 +45,9 @@ public class UserStore implements Store<Model, User> {
 
         StatementResult result = db.runQuery(query, params);
 
-        long id = result.single().get("n.id").asLong();
+        User user = extractUser( result.single() );
         
-        return new Parcel(Status.OK, msg, id);
+        return new Parcel(Status.OK, msg, user);
     }
 
     public Parcel read(long id, Neo4jDriver db){
@@ -70,21 +70,7 @@ public class UserStore implements Store<Model, User> {
         try {
             StatementResult result = db.runQuery(query, params);
 
-            Record record = result.single();
-            Node node = record.get("n").asNode();
-            Logger.debug("Got node");
-            Node data = record.get("d").asNode();
-            Logger.debug("Got data");
-
-            User user = new User();
-            user.assignAll(
-                node.get("id").asLong(),
-                new Date(data.get("created").asLong()),
-                data.get("name").asString(),
-                data.get("password").asString()
-            );
-
-            Logger.debug("User: " + user.id + ", " + user.name);
+            User user = extractUser( result.single() );
 
             return new Parcel(Status.OK, "ok", user);
 
@@ -184,5 +170,23 @@ public class UserStore implements Store<Model, User> {
         }
 
         return new Parcel(Status.ERROR, msg, null);
+    }
+
+    private User extractUser(Record record){
+
+        Node node = record.get("n").asNode();
+        Logger.debug("Got node");
+        Node data = record.get("d").asNode();
+        Logger.debug("Got data");
+
+        User user = new User();
+        user.assignAll(
+            node.get("id").asLong(),
+            new Date(data.get("created").asLong()),
+            data.get("name").asString(),
+            data.get("password").asString()
+        );
+
+        return user;
     }
 }

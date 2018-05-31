@@ -32,7 +32,14 @@ public class Requests {
 
             int respCode = conn.getResponseCode();
             if (respCode != 200 && respCode != 201 && respCode != 101) {
-                String error = inputStreamToString(conn.getErrorStream());
+
+                String error = "Error: " + inputStreamToString(conn.getErrorStream());
+
+                if ( "".equals(error) ) {
+                    error += "No error information from host.";
+                }
+
+                Logger.debug(error);
                 return error;
             }
             
@@ -73,20 +80,23 @@ public class Requests {
 
     public static String inputStreamToString(InputStream is) {
 
-        try {
-            BufferedReader br = null;
-            StringBuilder sb = new StringBuilder();
-    
-            String line;
-            br = new BufferedReader(new InputStreamReader(is));
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
+        if ( is != null ) {
+
+            try {
+                BufferedReader br = null;
+                StringBuilder sb = new StringBuilder();
+        
+                String line;
+                br = new BufferedReader(new InputStreamReader(is));
+                while ((line = br.readLine()) != null) {
+                    sb.append(line);
+                }
+                br.close();
+                return sb.toString();
+                
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            br.close();
-            return sb.toString();
-            
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
         return "";
