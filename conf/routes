@@ -13,3 +13,5 @@ POST    /api/v1/users                       v1.UserController.signup()
 GET     /api/v1/players/:id                 v1.PlayerController.get(id: Long)
 
 GET     /api/v1/token                       v1.TokenController.requestToken(username: String ?="", password: String ?="")
+
+GET     /api/v1/decks/:id                   v1.DeckController.get(id: Long)
