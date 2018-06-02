@@ -65,10 +65,10 @@ public class Authentication {
 
         String query =  
         "MATCH " + 
-        " (t:Token)-[:Grants]->(n)" + 
+        " (t:Token)-[:Grants|:Possess|:Got*]->(n)" + 
         " WHERE " +
-        " n.id = $id" +
-        " AND t.token = $token" +
+        " t.token = $token" +
+        " AND n.id = $id" +
         " SET t.refreshed = TIMESTAMP()" + 
         " RETURN n";
 

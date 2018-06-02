@@ -16,6 +16,22 @@ public class Deck extends Model {
     public boolean blue;
     public boolean colorless;
 
+    public void assignNew (String name, DeckFormat format, String theme, boolean black, boolean white, 
+            boolean red, boolean green, boolean blue, boolean colorless) throws IllegalArgumentException {
+        
+        this.name = name;
+        this.format = format;
+        this.theme = theme;
+        this.black = black;
+        this.white = white;
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
+        this.colorless = colorless;
+
+        validateFields();
+    }
+
     public void assignAll (long id, Date created, String name, DeckFormat format, String theme, 
             boolean black, boolean white, boolean red, boolean green, boolean blue, boolean colorless){
         this.id = id;
@@ -29,5 +45,14 @@ public class Deck extends Model {
         this.green = green;
         this.blue = blue;
         this.colorless = colorless;
+
+        validateFields();
+    }
+
+    private void validateFields() throws IllegalArgumentException {
+
+        if ( "".equals(this.name) ) {
+            throw new IllegalArgumentException();
+        }
     }
 }

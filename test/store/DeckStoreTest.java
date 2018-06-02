@@ -35,25 +35,25 @@ public class DeckStoreTest {
         Parcel created = deckStore.create(anchorPlayer, inputDeck, db);
 
         Status status = created.status;
-        Long createdDeckId = (Long) created.payload;
+        Deck createdDeck = (Deck) created.payload;
 
         assertEquals(Status.OK, status);
-        assertTrue(createdDeckId > 0);
+        assertTrue(createdDeck.id > 0);
 
 
         //Reading
-        Parcel createdParcel = deckStore.read(createdDeckId, db);
-        Deck createdDeck = (Deck) createdParcel.payload;
+        Parcel readParcel = deckStore.read(createdDeck.id, db);
+        Deck readDeck = (Deck) readParcel.payload;
 
-        Logger.debug("Deck read: " + createdDeck.id + ", " + createdDeck.name);
+        Logger.debug("Deck read: " + readDeck.id + ", " + readDeck.name);
 
         assertEquals(Status.OK, status);
-        assertEquals((Long)createdDeckId, (Long)createdDeck.id);
-        assertEquals(inputDeck.name, createdDeck.name);
-        assertEquals(inputDeck.format, createdDeck.format);
-        assertEquals(inputDeck.black, createdDeck.black);
-        assertEquals(inputDeck.green, createdDeck.green);
-        assertTrue(null != createdDeck.created);
+        assertEquals(createdDeck.id, readDeck.id);
+        assertEquals(inputDeck.name, readDeck.name);
+        assertEquals(inputDeck.format, readDeck.format);
+        assertEquals(inputDeck.black, readDeck.black);
+        assertEquals(inputDeck.green, readDeck.green);
+        assertTrue(null != readDeck.created);
         assertTrue(null != inputDeck.created);
 
 
@@ -74,14 +74,14 @@ public class DeckStoreTest {
         Deck updatedDeck = (Deck) updatedReadParcel.payload;
 
         assertEquals(Status.OK, status);
-        assertEquals((Long)createdDeckId, (Long)updatedDeck.id);
+        assertEquals(createdDeck.id, updatedDeck.id);
         assertEquals(updatingDeck.name, updatedDeck.name);
         assertEquals(updatingDeck.format, updatedDeck.format);
         assertEquals(updatingDeck.black, updatedDeck.black);
         assertEquals(updatingDeck.green, updatedDeck.green);
 
         //Deleting
-        Parcel deletedParcel = deckStore.delete(createdDeckId, db);
+        Parcel deletedParcel = deckStore.delete(createdDeck.id, db);
         boolean deleted = (Boolean) deletedParcel.payload;
 
         assertEquals(Status.OK, status);

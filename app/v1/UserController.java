@@ -18,16 +18,15 @@ public class UserController extends Controller{
 
     public play.mvc.Result signup(){
 
-        JsonNode json = request().body().asJson();
-        String userName = json.get("userName").textValue();
-        String password = json.get("password").textValue();
-        String playerName = json.get("playerName").textValue();
-
-        if ( !inputIsValid( userName, password, playerName ) ) {
-            return badRequest();
-        }
-
         try {
+            JsonNode json = request().body().asJson();
+            String userName = json.get("userName").textValue();
+            String password = json.get("password").textValue();
+            String playerName = json.get("playerName").textValue();
+    
+            if ( !inputIsValid( userName, password, playerName ) ) {
+                return badRequest();
+            }
 
             UserStore userStore = new UserStore();
             PlayerStore playerStore = new PlayerStore();

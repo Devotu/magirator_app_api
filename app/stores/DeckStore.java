@@ -50,7 +50,7 @@ public class DeckStore implements Store<Player, Deck> {
         "   blue:$blue," +
         "   colorless:$colorless" +
         " })" + 
-        " RETURN n.id";
+        " RETURN n,d";
 
         HashMap<String, Object> params = new HashMap<>();
 
@@ -69,10 +69,10 @@ public class DeckStore implements Store<Player, Deck> {
         params.put("colorless", model.colorless);
 
         StatementResult result = db.runQuery(query, params);
-
-        long id = result.single().get("n.id").asLong();
+        Record record = result.single();            
+        Deck deck = extractDeck( record );
         
-        return new Parcel(Status.OK, msg, id);
+        return new Parcel(Status.OK, msg, deck);
     }
 
     public Parcel read(long id, Neo4jDriver db){
@@ -94,28 +94,8 @@ public class DeckStore implements Store<Player, Deck> {
 
         try {
             StatementResult result = db.runQuery(query, params);
-
-            Record record = result.single();
-            Node node = record.get("n").asNode();
-            Node data = record.get("d").asNode();         
-
-            Deck deck = new Deck();
-            deck.assignAll(
-                node.get("id").asLong(),
-                new Date(data.get("created").asLong()),
-                data.get("name").asString(),
-                DeckFormat.valueOf(data.get("format").asString()),
-                data.get("theme").asString(),
-                data.get("black").asBoolean(),
-                data.get("white").asBoolean(),
-                data.get("red").asBoolean(),
-                data.get("green").asBoolean(),
-                data.get("blue").asBoolean(),
-                data.get("colorless").asBoolean()
-            );
-
-            Logger.debug("Deck: " + deck.id + ", " + deck.name);
-            Logger.debug("Created: " + deck.created.toString());
+            Record record = result.single();            
+            Deck deck = extractDeck( record );
 
             return new Parcel(Status.OK, "ok", deck);
 
@@ -235,5 +215,30 @@ public class DeckStore implements Store<Player, Deck> {
         }
 
         return new Parcel(Status.ERROR, msg, null);
+    }
+
+    private Deck extractDeck(Record record){
+
+        Node node = record.get("n").asNode();
+        Logger.debug("Got node");
+        Node data = record.get("d").asNode();
+        Logger.debug("Got data");
+
+        Deck deck = new Deck();
+        deck.assignAll(
+            node.get("id").asLong(),
+            new Date(data.get("created").asLong()),
+            data.get("name").asString(),
+            DeckFormat.valueOf(data.get("format").asString()),
+            data.get("theme").asString(),
+            data.get("black").asBoolean(),
+            data.get("white").asBoolean(),
+            data.get("red").asBoolean(),
+            data.get("green").asBoolean(),
+            data.get("blue").asBoolean(),
+            data.get("colorless").asBoolean()
+        );
+
+        return deck;
     }
 }
