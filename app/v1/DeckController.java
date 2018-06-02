@@ -7,6 +7,8 @@ import responses.*;
 import stores.*;
 import transfers.*;
 
+import java.util.List;
+
 import play.mvc.*;
 
 import com.fasterxml.jackson.databind.*;
@@ -88,5 +90,30 @@ public class DeckController extends Controller{
         }
 
         return internalServerError();
-    }    
+    } 
+
+    public play.mvc.Result listByPlayer(long playerId){
+
+        try {
+            //Read data
+            DeckStore deckStore = new DeckStore();
+            Neo4jDriver db = new Neo4jDriver();
+
+            Parcel decksParcel = deckStore.listByPlayer( playerId, db );
+
+            if( decksParcel.status == Status.OK )
+            {
+                return ok( JsonResponses.convertListToData( (List)decksParcel.payload, new Deck() ) );
+            } 
+            else if ( decksParcel.status == Status.NOT_FOUND )
+            {
+                return notFound();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return internalServerError();
+    }   
 }

@@ -9,12 +9,12 @@ import transfers.*;
 import drivers.*;
 import test.*;
 
-import java.util.Date;
+import java.util.*;
 
 public class DeckStoreTest {
 
     @Test
-    public void deck(){
+    public void CRUD(){
 
         Neo4jDriver db = new Neo4jDriver();
 
@@ -86,6 +86,24 @@ public class DeckStoreTest {
 
         assertEquals(Status.OK, status);
         assertEquals((Boolean)true, (Boolean)deleted);
+    }
+
+    @Test
+    public void listDecks(){
+
+        Neo4jDriver db = new Neo4jDriver();
+
+        //Listing
+        DeckStore deckStore = new DeckStore();
+
+        Parcel created = deckStore.listByPlayer( TestVariables.PLAYER_1_ID, db );
+
+        Status status = created.status;
+        List<?> decks = (List<?>) created.payload;
+
+        assertEquals(Status.OK, status);
+        assertTrue(decks != null);
+        assertTrue(decks.size() > 0);
     }
 
 }

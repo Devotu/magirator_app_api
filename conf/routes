@@ -15,4 +15,5 @@ GET     /api/v1/players/:id                 v1.PlayerController.get(id: Long)
 GET     /api/v1/token                       v1.TokenController.requestToken(username: String ?="", password: String ?="")
 
 GET     /api/v1/decks/:id                   v1.DeckController.get(id: Long)
+GET     /api/v1/players/:id/decks           v1.DeckController.listByPlayer(id: Long)
 POST    /api/v1/decks                       v1.DeckController.create()

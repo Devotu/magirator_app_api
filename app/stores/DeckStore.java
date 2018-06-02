@@ -4,8 +4,7 @@ import model.*;
 import transfers.*;
 import drivers.*;
 
-import java.util.HashMap;
-import java.util.Date;
+import java.util.*;
 
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.Record;
@@ -97,7 +96,50 @@ public class DeckStore implements Store<Player, Deck> {
             Record record = result.single();            
             Deck deck = extractDeck( record );
 
-            return new Parcel(Status.OK, "ok", deck);
+            return new Parcel(Status.OK, "", deck);
+
+        } catch (Exception e) {
+            Logger.debug(this.getClass().getName() + ": " + e.toString());             
+            e.printStackTrace();
+        }
+
+        return new Parcel(Status.ERROR, msg, null);
+    }
+
+    /**
+     * OK, ERROR
+     * -
+     * List<Deck>
+     */
+    public Parcel listByPlayer(long playerId, Neo4jDriver db){
+
+        String msg = "";
+
+        String query =  
+        "MATCH (a:Player)" +
+        "-[:Possess]->" +
+        "(n:Deck)" +
+        " -[:Currently]->" +
+        " (d:Data)" +
+        " WHERE a.id = $id" + 
+        " RETURN n,d";
+
+        HashMap<String, Object> params = new HashMap<>();
+
+        Logger.debug("Reading decks belonging to " + playerId);
+        
+        params.put("id", playerId);
+
+        try {
+            StatementResult result = db.runQuery(query, params);
+            List<Record> records = result.list();
+            List<Deck> decks = new ArrayList();
+
+            for (Record r : records) {
+                decks.add( extractDeck( r ) );
+            }
+
+            return new Parcel(Status.OK, "", decks);
 
         } catch (Exception e) {
             Logger.debug(this.getClass().getName() + ": " + e.toString());             

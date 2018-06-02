@@ -1,8 +1,10 @@
 package v1;
 
 import test.*;
+import model.*;
 
 import java.io.IOException;
+import java.util.*;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -11,6 +13,8 @@ import org.apache.http.HttpStatus;
 
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.node.*;
+
+import play.Logger;
 
 public class DeckControllerTest {
 
@@ -85,5 +89,33 @@ public class DeckControllerTest {
         assertTrue(response.get("data").get("Deck").has("name"));
         assertTrue(response.get("data").get("Deck").get("black").asBoolean());
         assertTrue(!response.get("data").get("Deck").get("red").asBoolean());
+    }
+
+    @Test
+    public void playerListSuccessful(){
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectNode response = objectMapper.createObjectNode();
+        List<Deck> decks = new ArrayList();
+
+        try {
+            response = objectMapper.readValue(
+                Requests.makeRequest(
+                    TestVariables.BASE_URL + "/players/" + TestVariables.PLAYER_1_ID + "/decks", 
+                    "GET"
+                ), ObjectNode.class
+            );
+
+            for (JsonNode node : response.get("data").get("Decks")) {
+                decks.add( objectMapper.treeToValue(node, Deck.class) );
+            }
+                
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        assertTrue(response.get("data").has("Decks"));
+        assertTrue(decks != null);
+        assertTrue(decks.size() > 0);
     }
 }
