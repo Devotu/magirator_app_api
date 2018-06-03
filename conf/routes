@@ -11,6 +11,7 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 POST    /api/v1/users                       v1.UserController.signup()
 
 GET     /api/v1/players/:id                 v1.PlayerController.get(id: Long)
+GET     /api/v1/players                     v1.PlayerController.list()
 
 GET     /api/v1/token                       v1.TokenController.requestToken(username: String ?="", password: String ?="")
 

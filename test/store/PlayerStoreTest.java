@@ -1,13 +1,15 @@
 package stores;
 
-import static org.junit.Assert.*;
-import org.junit.Test;
-import play.Logger;
-
 import model.*;
 import transfers.*;
 import drivers.*;
 import test.*;
+
+import java.util.*;
+
+import static org.junit.Assert.*;
+import org.junit.Test;
+import play.Logger;
 
 public class PlayerStoreTest {
 
@@ -73,4 +75,21 @@ public class PlayerStoreTest {
         assertEquals((Boolean)true, (Boolean)deleted);
     }
 
+
+    @Test
+    public void listPlayers(){
+
+        Neo4jDriver db = new Neo4jDriver();
+
+        PlayerStore playerStore = new PlayerStore();
+
+        Parcel created = playerStore.list( db );
+
+        Status status = created.status;
+        List<?> players = (List<?>) created.payload;
+
+        assertEquals(Status.OK, status);
+        assertTrue(players != null);
+        assertTrue(players.size() > 0);
+    }
 }

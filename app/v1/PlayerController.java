@@ -1,9 +1,12 @@
 package v1;
 
 import drivers.*;
+import model.*;
 import responses.*;
 import stores.*;
 import transfers.*;
+
+import java.util.*;
 
 import play.mvc.*;
 
@@ -13,10 +16,9 @@ import org.apache.http.HttpStatus;
 
 public class PlayerController extends Controller{
 
-    public Result get(long id){
+    public play.mvc.Result get(long id){
 
         try {
-            //Read data
             PlayerStore playerStore = new PlayerStore();
             Neo4jDriver db = new Neo4jDriver();
             Parcel dataParcel = playerStore.read( id, db );
@@ -35,5 +37,28 @@ public class PlayerController extends Controller{
         }
 
         return internalServerError();
-    }    
+    }
+
+    public play.mvc.Result list(){
+
+        try {
+            PlayerStore playerStore = new PlayerStore();
+            Neo4jDriver db = new Neo4jDriver();
+            Parcel dataParcel = playerStore.list( db );
+
+            if( dataParcel.status == Status.OK )
+            {
+                return ok( JsonResponses.convertListToData( (List)dataParcel.payload, new Player() ) );
+            } 
+            else if ( dataParcel.status == Status.NOT_FOUND )
+            {
+                return notFound();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return internalServerError();
+    }
 }

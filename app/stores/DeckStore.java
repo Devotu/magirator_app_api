@@ -262,9 +262,7 @@ public class DeckStore implements Store<Player, Deck> {
     private Deck extractDeck(Record record){
 
         Node node = record.get("n").asNode();
-        Logger.debug("Got node");
         Node data = record.get("d").asNode();
-        Logger.debug("Got data");
 
         Deck deck = new Deck();
         deck.assignAll(

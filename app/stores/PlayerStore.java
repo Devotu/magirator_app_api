@@ -4,9 +4,7 @@ import model.*;
 import transfers.*;
 import drivers.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Date;
+import java.util.*;
 
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.Record;
@@ -111,6 +109,48 @@ public class PlayerStore implements Store<User, Player> {
         return new Parcel(Status.ERROR, msg, null);
     }
 
+    /**
+     * OK, ERROR
+     * -
+     * List<Deck>
+     */
+    public Parcel list(Neo4jDriver db){
+
+        String msg = "";
+
+        String query =  
+        "MATCH (n:Player:Active)" +
+        " -[:Currently]->" +
+        " (d:Data)" +
+        " OPTIONAL MATCH (n:Player:Active)" +
+        " -[:Possess]->" +
+        " (deck:Deck)" +
+        " RETURN n,d," + 
+        " collect(deck.id) as deckIds";
+
+        HashMap<String, Object> params = new HashMap<>();
+
+        Logger.debug("Reading players");
+
+        try {
+            StatementResult result = db.runQuery(query, params);
+            List<Record> records = result.list();
+            List<Player> players = new ArrayList();
+
+            for (Record r : records) {
+                players.add( extractPlayer( r ) );
+            }
+
+            return new Parcel(Status.OK, "", players);
+
+        } catch (Exception e) {
+            Logger.debug(this.getClass().getName() + ": " + e.toString());             
+            e.printStackTrace();
+        }
+
+        return new Parcel(Status.ERROR, msg, null);
+    }
+
     public Parcel update(Player newPlayer, Neo4jDriver db){
 
         String msg = "";
@@ -198,5 +238,22 @@ public class PlayerStore implements Store<User, Player> {
         }
 
         return new Parcel(Status.ERROR, msg, null);
+    }
+
+    private Player extractPlayer(Record record){
+
+        Node node = record.get("n").asNode();
+        Node data = record.get("d").asNode();
+        List<Object> deckIds = record.get("deckIds").asList();
+
+        Player player = new Player();
+        player.assignAll(
+            node.get("id").asLong(),
+            new Date(data.get("created").asLong()),
+            data.get("name").asString(),
+            deckIds
+        );
+
+        return player;
     }
 }
