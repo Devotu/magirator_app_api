@@ -11,12 +11,12 @@ Each obj has one of two kinds of editType, either persistent (hidden/evolved), f
 
 -- Store --
 Each obj has a Store
-Each obj (with sub-objects) can be stored through its persist method
-Each obj can be retrieved from Store by Id through its fetch method
+Each obj (with sub-objects) can be stored through its create method
+Each obj can be retrieved from Store by Id through its read method
 PERSISTENT objects have the update method, which in fact creates a new copy with new attributes
 Final objects have the delete method which deletes the object together with all its components
 Component objects does not have their own delete method, they are deleted together with their parent
-
+Stores strive to have the methods Create, Read, Update & Delete.
 
 
 

@@ -18,3 +18,7 @@ GET     /api/v1/token                       v1.TokenController.requestToken(user
 GET     /api/v1/decks/:id                   v1.DeckController.get(id: Long)
 GET     /api/v1/players/:id/decks           v1.DeckController.listByPlayer(id: Long)
 POST    /api/v1/decks                       v1.DeckController.create()
+
+GET     /api/v1/games/:id                   v1.GameController.get(id: Long)
+GET     /api/v1/players/:id/games           v1.GameController.listByPlayer(id: Long)
+POST    /api/v1/games                       v1.GameController.create()

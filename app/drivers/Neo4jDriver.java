@@ -60,7 +60,7 @@ public class Neo4jDriver implements AutoCloseable {
         }
     }
 
-    @Override
+    
     public void close() throws Exception {
         driver.close();
     }

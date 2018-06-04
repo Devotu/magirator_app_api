@@ -9,15 +9,21 @@ public class TestVariables {
 
     public static final long GLOBAL_UNIQUE_START = 1000;
     public static final long INVALID_ID = -1;
+
     public static final long USER_1_ID = 1;
     public static final long USER_2_ID = 2;
+
     public static final long PLAYER_1_ID = 10;
     public static final long PLAYER_2_ID = 11;
+
     public static final long DECK_1_ID = 20;
     public static final long DECK_2_ID = 21;
+
     public static final long RESULT_1_ID = 30;
     public static final long RESULT_2_ID = 31;
     public static final long RESULT_3_ID = 32;
+    
+    public static final long GAME_1_ID = 40;
 
     public static final String USER_1_NAME = "Adam";
     public static final String USER_1_PASSWORD = "Hemligt";

@@ -1,7 +1,7 @@
 name := """Magirator API"""
 organization := "net.magirator"
 
-version := "0.3-FACADE"
+version := "0.4-HAPPY"
 
 lazy val root = (project in file(".")).enablePlugins(PlayJava)
 

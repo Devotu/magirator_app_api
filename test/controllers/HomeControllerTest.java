@@ -14,7 +14,7 @@ import static play.test.Helpers.route;
 
 public class HomeControllerTest extends WithApplication {
 
-    @Override
+    
     protected Application provideApplication() {
         return new GuiceApplicationBuilder().build();
     }

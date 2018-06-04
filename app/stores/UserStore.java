@@ -15,9 +15,9 @@ import static org.neo4j.driver.v1.Values.parameters;
 
 import play.Logger;
 
-public class UserStore implements Store<Model, User> {
+public class UserStore {
 
-    @Override
+    
     public Parcel create( Model _anchor, User model, Neo4jDriver db ){
 
         String msg = "";
