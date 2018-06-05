@@ -14,7 +14,6 @@ public class ObjectTest {
     
     @Test 
     public void objects() {
-        Logger.debug("Testing Objects");
 
         User user = new User();
         assertEquals(ModelEditType.PERSISTENT, user.editType);

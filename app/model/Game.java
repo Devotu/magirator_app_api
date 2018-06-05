@@ -7,16 +7,16 @@ public class Game extends Model {
     public ModelEditType editType = ModelEditType.FINAL;
 
     public GameEnd end;
-    public List<Result> resultIds;
+    public List<Long> resultIds = new ArrayList<>();
 
-
-    public void assignNew (GameEnd end) throws IllegalArgumentException {
+    public void assignNew ( GameEnd end ) throws IllegalArgumentException {
         
         this.end = end;
 
         validateFields();
     }
-
+    
+    @SuppressWarnings("unchecked")
     public void assignAll ( long id, Date created, GameEnd end, List resultIds ) throws IllegalArgumentException {
         
         this.id = id;

@@ -9,7 +9,7 @@ public class Player extends Model {
     public ModelEditType editType = ModelEditType.PERSISTENT;
 
     public String name;
-    public List<Long> deckIds = new ArrayList();
+    public List<Long> deckIds = new ArrayList<>();
 
     public void assignNew ( String name ){
         this.name = name;

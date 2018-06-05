@@ -33,7 +33,7 @@ public class Requests {
             int respCode = conn.getResponseCode();
             if (respCode != 200 && respCode != 201 && respCode != 101) {
 
-                String error = "Error: " + inputStreamToString(conn.getErrorStream());
+                String error = "Error: \n " + url.toString() + " \n" + inputStreamToString(conn.getErrorStream());
 
                 if ( "".equals(error) ) {
                     error += "No error information from host.";
