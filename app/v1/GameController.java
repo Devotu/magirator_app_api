@@ -28,26 +28,28 @@ public class GameController extends Controller{
             Game game = new Game();
             game.assignNew( GameEnd.valueOf(end) );
 
-            GameStore gameStore = new GameStore();
-            PlayerStore playerStore = new PlayerStore();
-            Neo4jDriver db = new Neo4jDriver();
+            try ( Neo4jDriver db = new Neo4jDriver() ){
 
-            Parcel playerParcel = playerStore.read( anchorId, db );
-            Player player = (Player) playerParcel.payload;
-            if (player == null) {
-                return notFound();
-            }
+                GameStore gameStore = new GameStore();
+                PlayerStore playerStore = new PlayerStore();
 
-            Parcel grantParcel = Authentication.validateGrant( anchorId, token, db );
-            if (grantParcel.status != Status.OK) {
-                return unauthorized();
-            }
+                Parcel playerParcel = playerStore.read( anchorId, db );
+                Player player = (Player) playerParcel.payload;
+                if (player == null) {
+                    return notFound();
+                }
 
-            Parcel gameParcel = gameStore.create( player, game, db );
+                Parcel grantParcel = Authentication.validateGrant( anchorId, token, db );
+                if (grantParcel.status != Status.OK) {
+                    return unauthorized();
+                }
 
-            if( gameParcel.status == Status.OK )
-            {
-                return ok( JsonResponses.convertToData( gameParcel.payload ) );
+                Parcel gameParcel = gameStore.create( player, game, db );
+
+                if( gameParcel.status == Status.OK )
+                {
+                    return ok( JsonResponses.convertToData( gameParcel.payload ) );
+                }
             }
 
         } catch (IllegalArgumentException e) {            
@@ -64,18 +66,20 @@ public class GameController extends Controller{
     public play.mvc.Result get(long id){
 
         try {
-            //Read data
-            GameStore gameStore = new GameStore();
-            Neo4jDriver db = new Neo4jDriver();
-            Parcel gameParcel = gameStore.read( id, db );
+            
+            try ( Neo4jDriver db = new Neo4jDriver() ){
 
-            if( gameParcel.status == Status.OK )
-            {
-                return ok( JsonResponses.convertToData( gameParcel.payload ) );
-            } 
-            else if ( gameParcel.status == Status.NOT_FOUND )
-            {
-                return notFound();
+                GameStore gameStore = new GameStore();
+                Parcel gameParcel = gameStore.read( id, db );
+
+                if( gameParcel.status == Status.OK )
+                {
+                    return ok( JsonResponses.convertToData( gameParcel.payload ) );
+                } 
+                else if ( gameParcel.status == Status.NOT_FOUND )
+                {
+                    return notFound();
+                }
             }
 
         } catch (Exception e) {
@@ -89,19 +93,21 @@ public class GameController extends Controller{
     public play.mvc.Result listByPlayer(long playerId){
 
         try {
-            //Read data
-            GameStore gameStore = new GameStore();
-            Neo4jDriver db = new Neo4jDriver();
+            
+            try ( Neo4jDriver db = new Neo4jDriver() ){
 
-            Parcel gamesParcel = gameStore.listByPlayer( playerId, db );
+                GameStore gameStore = new GameStore();
 
-            if( gamesParcel.status == Status.OK )
-            {
-                return ok( JsonResponses.convertListToData( (List)gamesParcel.payload, new Game() ) );
-            } 
-            else if ( gamesParcel.status == Status.NOT_FOUND )
-            {
-                return notFound();
+                Parcel gamesParcel = gameStore.listByPlayer( playerId, db );
+
+                if( gamesParcel.status == Status.OK )
+                {
+                    return ok( JsonResponses.convertListToData( (List)gamesParcel.payload, new Game() ) );
+                } 
+                else if ( gamesParcel.status == Status.NOT_FOUND )
+                {
+                    return notFound();
+                }
             }
 
         } catch (Exception e) {

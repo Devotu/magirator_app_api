@@ -62,6 +62,7 @@ public class Neo4jDriver implements AutoCloseable {
 
     
     public void close() throws Exception {
+        Logger.debug("Closing db driver");
         driver.close();
     }
 

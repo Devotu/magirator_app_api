@@ -28,24 +28,26 @@ public class UserController extends Controller{
                 return badRequest();
             }
 
-            UserStore userStore = new UserStore();
-            PlayerStore playerStore = new PlayerStore();
-            Neo4jDriver db = new Neo4jDriver();
+            try ( Neo4jDriver db = new Neo4jDriver() ){
 
-            User user = new User();
-            user.assignNew( userName, password );
-            
-            Parcel userData = userStore.create( null, user, db );
-            User createdUser = (User) userData.payload;
+                UserStore userStore = new UserStore();
+                PlayerStore playerStore = new PlayerStore();
 
-            Player player = new Player();
-            player.assignNew( playerName );
+                User user = new User();
+                user.assignNew( userName, password );
+                
+                Parcel userData = userStore.create( null, user, db );
+                User createdUser = (User) userData.payload;
 
-            Parcel playerParcel = playerStore.create( createdUser, player, db );
+                Player player = new Player();
+                player.assignNew( playerName );
 
-            if( playerParcel.status == Status.OK )
-            {
-                return ok();
+                Parcel playerParcel = playerStore.create( createdUser, player, db );
+
+                if( playerParcel.status == Status.OK )
+                {
+                    return ok();
+                }
             }
 
         } catch (Exception e) {

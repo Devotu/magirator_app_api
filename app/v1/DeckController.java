@@ -36,26 +36,29 @@ public class DeckController extends Controller{
             Deck deck = new Deck();
             deck.assignNew(name, DeckFormat.valueOf(format), theme, black, white, red, green, blue, colorless);
 
-            DeckStore deckStore = new DeckStore();
-            PlayerStore playerStore = new PlayerStore();
-            Neo4jDriver db = new Neo4jDriver();
 
-            Parcel playerParcel = playerStore.read( anchorId, db );
-            Player player = (Player) playerParcel.payload;
-            if (player == null) {
-                return notFound();
-            }
+            try ( Neo4jDriver db = new Neo4jDriver() ){
 
-            Parcel grantParcel = Authentication.validateGrant( anchorId, token, db );
-            if (grantParcel.status != Status.OK) {
-                return unauthorized();
-            }
+                DeckStore deckStore = new DeckStore();
+                PlayerStore playerStore = new PlayerStore();
 
-            Parcel deckParcel = deckStore.create( player, deck, db );
+                Parcel playerParcel = playerStore.read( anchorId, db );
+                Player player = (Player) playerParcel.payload;
+                if (player == null) {
+                    return notFound();
+                }
 
-            if( deckParcel.status == Status.OK )
-            {
-                return ok( JsonResponses.convertToData( deckParcel.payload ) );
+                Parcel grantParcel = Authentication.validateGrant( anchorId, token, db );
+                if (grantParcel.status != Status.OK) {
+                    return unauthorized();
+                }
+
+                Parcel deckParcel = deckStore.create( player, deck, db );
+
+                if( deckParcel.status == Status.OK )
+                {
+                    return ok( JsonResponses.convertToData( deckParcel.payload ) );
+                }
             }
 
         } catch (IllegalArgumentException e) {            
@@ -71,18 +74,20 @@ public class DeckController extends Controller{
     public play.mvc.Result get(long id){
 
         try {
-            //Read data
-            DeckStore deckStore = new DeckStore();
-            Neo4jDriver db = new Neo4jDriver();
-            Parcel deckParcel = deckStore.read( id, db );
+            
+            try ( Neo4jDriver db = new Neo4jDriver() ){
 
-            if( deckParcel.status == Status.OK )
-            {
-                return ok( JsonResponses.convertToData( deckParcel.payload ) );
-            } 
-            else if ( deckParcel.status == Status.NOT_FOUND )
-            {
-                return notFound();
+                DeckStore deckStore = new DeckStore();
+                Parcel deckParcel = deckStore.read( id, db );
+
+                if( deckParcel.status == Status.OK )
+                {
+                    return ok( JsonResponses.convertToData( deckParcel.payload ) );
+                } 
+                else if ( deckParcel.status == Status.NOT_FOUND )
+                {
+                    return notFound();
+                }
             }
 
         } catch (Exception e) {
@@ -95,19 +100,21 @@ public class DeckController extends Controller{
     public play.mvc.Result listByPlayer(long playerId){
 
         try {
-            //Read data
-            DeckStore deckStore = new DeckStore();
-            Neo4jDriver db = new Neo4jDriver();
+            
+            try ( Neo4jDriver db = new Neo4jDriver() ){
 
-            Parcel decksParcel = deckStore.listByPlayer( playerId, db );
+                DeckStore deckStore = new DeckStore();
 
-            if( decksParcel.status == Status.OK )
-            {
-                return ok( JsonResponses.convertListToData( (List)decksParcel.payload, new Deck() ) );
-            } 
-            else if ( decksParcel.status == Status.NOT_FOUND )
-            {
-                return notFound();
+                Parcel decksParcel = deckStore.listByPlayer( playerId, db );
+
+                if( decksParcel.status == Status.OK )
+                {
+                    return ok( JsonResponses.convertListToData( (List)decksParcel.payload, new Deck() ) );
+                } 
+                else if ( decksParcel.status == Status.NOT_FOUND )
+                {
+                    return notFound();
+                }
             }
 
         } catch (Exception e) {

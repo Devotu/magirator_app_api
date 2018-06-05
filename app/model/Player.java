@@ -15,6 +15,7 @@ public class Player extends Model {
         this.name = name;
     }
 
+    @SuppressWarnings("unchecked")
     public void assignAll ( long id, Date created, String name, List deckIds ){
         this.id = id;
         this.created = created;

@@ -18,18 +18,23 @@ public class PlayerController extends Controller{
 
     public play.mvc.Result get(long id){
 
-        try {
-            PlayerStore playerStore = new PlayerStore();
-            Neo4jDriver db = new Neo4jDriver();
-            Parcel dataParcel = playerStore.read( id, db );
 
-            if( dataParcel.status == Status.OK )
-            {
-                return ok( JsonResponses.convertToData( dataParcel.payload ) );
-            } 
-            else if ( dataParcel.status == Status.NOT_FOUND )
-            {
-                return notFound();
+        try {
+
+            try ( Neo4jDriver db = new Neo4jDriver() ){
+
+                PlayerStore playerStore = new PlayerStore();
+            
+                Parcel dataParcel = playerStore.read( id, db );
+    
+                if( dataParcel.status == Status.OK )
+                {
+                    return ok( JsonResponses.convertToData( dataParcel.payload ) );
+                } 
+                else if ( dataParcel.status == Status.NOT_FOUND )
+                {
+                    return notFound();
+                }
             }
 
         } catch (Exception e) {
@@ -42,17 +47,20 @@ public class PlayerController extends Controller{
     public play.mvc.Result list(){
 
         try {
-            PlayerStore playerStore = new PlayerStore();
-            Neo4jDriver db = new Neo4jDriver();
-            Parcel dataParcel = playerStore.list( db );
 
-            if( dataParcel.status == Status.OK )
-            {
-                return ok( JsonResponses.convertListToData( (List)dataParcel.payload, new Player() ) );
-            } 
-            else if ( dataParcel.status == Status.NOT_FOUND )
-            {
-                return notFound();
+            try ( Neo4jDriver db = new Neo4jDriver() ){
+
+                PlayerStore playerStore = new PlayerStore();
+                Parcel dataParcel = playerStore.list( db );
+
+                if( dataParcel.status == Status.OK )
+                {
+                    return ok( JsonResponses.convertListToData( (List)dataParcel.payload, new Player() ) );
+                } 
+                else if ( dataParcel.status == Status.NOT_FOUND )
+                {
+                    return notFound();
+                }
             }
 
         } catch (Exception e) {
