@@ -16,7 +16,7 @@ public class GameStoreTest {
     @Test
     public void CRuD(){
 
-        Neo4jDriver db = new Neo4jDriver();
+        Neo4jDriver db = Neo4jDriverFactory.getDriver();
 
         //Fetching Anchor 
         PlayerStore playerStore = new PlayerStore();

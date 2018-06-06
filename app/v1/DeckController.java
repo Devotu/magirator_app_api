@@ -38,7 +38,7 @@ public class DeckController extends Controller{
 
             DeckStore deckStore = new DeckStore();
             PlayerStore playerStore = new PlayerStore();
-            Neo4jDriver db = new Neo4jDriver();
+            Neo4jDriver db = Neo4jDriverFactory.getDriver();
 
             Parcel playerParcel = playerStore.read( anchorId, db );
             Player player = (Player) playerParcel.payload;
@@ -73,7 +73,7 @@ public class DeckController extends Controller{
         try {
             //Read data
             DeckStore deckStore = new DeckStore();
-            Neo4jDriver db = new Neo4jDriver();
+            Neo4jDriver db = Neo4jDriverFactory.getDriver();
             Parcel deckParcel = deckStore.read( id, db );
 
             if( deckParcel.status == Status.OK )
@@ -97,7 +97,7 @@ public class DeckController extends Controller{
         try {
             //Read data
             DeckStore deckStore = new DeckStore();
-            Neo4jDriver db = new Neo4jDriver();
+            Neo4jDriver db = Neo4jDriverFactory.getDriver();
 
             Parcel decksParcel = deckStore.listByPlayer( playerId, db );
 

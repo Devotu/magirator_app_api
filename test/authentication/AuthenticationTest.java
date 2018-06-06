@@ -14,7 +14,7 @@ public class AuthenticationTest {
     @Test 
     public void requestTokenSuccess() {
 
-        Neo4jDriver db = new Neo4jDriver();
+        Neo4jDriver db = Neo4jDriverFactory.getDriver();
 
         String username = TestVariables.USER_1_NAME;
         String password = TestVariables.USER_1_PASSWORD;
@@ -30,7 +30,7 @@ public class AuthenticationTest {
     @Test 
     public void requestTokenFailureUser() {
 
-        Neo4jDriver db = new Neo4jDriver();
+        Neo4jDriver db = Neo4jDriverFactory.getDriver();
 
         String username = "Errol";
         String password = TestVariables.USER_1_PASSWORD;
@@ -45,7 +45,7 @@ public class AuthenticationTest {
     @Test 
     public void requestTokenFailurePassword() {
 
-        Neo4jDriver db = new Neo4jDriver();
+        Neo4jDriver db = Neo4jDriverFactory.getDriver();
 
         String username = TestVariables.USER_1_NAME;
         String password = "Wrong";
@@ -60,7 +60,7 @@ public class AuthenticationTest {
     @Test 
     public void validateTokenSuccess() {
 
-        Neo4jDriver db = new Neo4jDriver();
+        Neo4jDriver db = Neo4jDriverFactory.getDriver();
 
         long playerId = TestVariables.PLAYER_2_ID;
         String token = TestVariables.PLAYER_2_TOKEN;
@@ -73,7 +73,7 @@ public class AuthenticationTest {
     @Test 
     public void validateTokenFailureTarget() {
 
-        Neo4jDriver db = new Neo4jDriver();
+        Neo4jDriver db = Neo4jDriverFactory.getDriver();
 
         long playerId = TestVariables.INVALID_ID;
         String token = TestVariables.PLAYER_2_TOKEN;
@@ -86,7 +86,7 @@ public class AuthenticationTest {
     @Test 
     public void validateTokenFailureToken() {
 
-        Neo4jDriver db = new Neo4jDriver();
+        Neo4jDriver db = Neo4jDriverFactory.getDriver();
 
         long playerId = TestVariables.PLAYER_2_ID;
         String token = "XXX";

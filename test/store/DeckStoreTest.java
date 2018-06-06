@@ -16,7 +16,7 @@ public class DeckStoreTest {
     @Test
     public void CRUD(){
 
-        Neo4jDriver db = new Neo4jDriver();
+        Neo4jDriver db = Neo4jDriverFactory.getDriver();
 
         //Fetching Anchor 
         PlayerStore playerStore = new PlayerStore();
@@ -91,7 +91,7 @@ public class DeckStoreTest {
     @Test
     public void listDecks(){
 
-        Neo4jDriver db = new Neo4jDriver();
+        Neo4jDriver db = Neo4jDriverFactory.getDriver();
 
         //Listing
         DeckStore deckStore = new DeckStore();

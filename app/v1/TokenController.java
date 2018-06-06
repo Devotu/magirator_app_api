@@ -17,7 +17,7 @@ public class TokenController extends Controller{
     public Result requestToken(String username, String password){
 
         try {
-            Neo4jDriver db = new Neo4jDriver();
+            Neo4jDriver db = Neo4jDriverFactory.getDriver();
 
             Parcel dataParcel = Authentication.requestToken( username, password, db);
 

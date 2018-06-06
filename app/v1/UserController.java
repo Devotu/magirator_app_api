@@ -30,7 +30,7 @@ public class UserController extends Controller{
 
             UserStore userStore = new UserStore();
             PlayerStore playerStore = new PlayerStore();
-            Neo4jDriver db = new Neo4jDriver();
+            Neo4jDriver db = Neo4jDriverFactory.getDriver();
 
             User user = new User();
             user.assignNew( userName, password );

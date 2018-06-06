@@ -20,7 +20,7 @@ public class PlayerController extends Controller{
 
         try {
             PlayerStore playerStore = new PlayerStore();
-            Neo4jDriver db = new Neo4jDriver();
+            Neo4jDriver db = Neo4jDriverFactory.getDriver();
             Parcel dataParcel = playerStore.read( id, db );
 
             if( dataParcel.status == Status.OK )
@@ -43,7 +43,7 @@ public class PlayerController extends Controller{
 
         try {
             PlayerStore playerStore = new PlayerStore();
-            Neo4jDriver db = new Neo4jDriver();
+            Neo4jDriver db = Neo4jDriverFactory.getDriver();
             Parcel dataParcel = playerStore.list( db );
 
             if( dataParcel.status == Status.OK )

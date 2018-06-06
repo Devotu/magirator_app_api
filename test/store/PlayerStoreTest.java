@@ -16,7 +16,7 @@ public class PlayerStoreTest {
     @Test
     public void player(){
 
-        Neo4jDriver db = new Neo4jDriver();
+        Neo4jDriver db = Neo4jDriverFactory.getDriver();
 
         //Fetching Anchor 
         UserStore userStore = new UserStore();
@@ -79,7 +79,7 @@ public class PlayerStoreTest {
     @Test
     public void listPlayers(){
 
-        Neo4jDriver db = new Neo4jDriver();
+        Neo4jDriver db = Neo4jDriverFactory.getDriver();
 
         PlayerStore playerStore = new PlayerStore();
 

@@ -10,7 +10,7 @@ public class DriverTest {
     public void driverConnection() {
         Logger.debug("Testing db driver connection");
 
-        Neo4jDriver db = new Neo4jDriver();
+        Neo4jDriver db = Neo4jDriverFactory.getDriver();
 
         int uniqueId = 0;
 

@@ -30,7 +30,7 @@ public class GameController extends Controller{
 
             GameStore gameStore = new GameStore();
             PlayerStore playerStore = new PlayerStore();
-            Neo4jDriver db = new Neo4jDriver();
+            Neo4jDriver db = Neo4jDriverFactory.getDriver();
 
             Parcel playerParcel = playerStore.read( anchorId, db );
             Player player = (Player) playerParcel.payload;
@@ -66,7 +66,7 @@ public class GameController extends Controller{
         try {
             //Read data
             GameStore gameStore = new GameStore();
-            Neo4jDriver db = new Neo4jDriver();
+            Neo4jDriver db = Neo4jDriverFactory.getDriver();
             Parcel gameParcel = gameStore.read( id, db );
 
             if( gameParcel.status == Status.OK )
@@ -91,7 +91,7 @@ public class GameController extends Controller{
         try {
             //Read data
             GameStore gameStore = new GameStore();
-            Neo4jDriver db = new Neo4jDriver();
+            Neo4jDriver db = Neo4jDriverFactory.getDriver();
 
             Parcel gamesParcel = gameStore.listByPlayer( playerId, db );
 
