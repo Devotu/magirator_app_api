@@ -18,11 +18,12 @@ public class PlayerController extends Controller{
 
     public play.mvc.Result get(long id){
 
+
         try {
             PlayerStore playerStore = new PlayerStore();
             Neo4jDriver db = Neo4jDriverFactory.getDriver();
             Parcel dataParcel = playerStore.read( id, db );
-
+    
             if( dataParcel.status == Status.OK )
             {
                 return ok( JsonResponses.convertToData( dataParcel.payload ) );
